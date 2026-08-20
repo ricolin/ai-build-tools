@@ -1,0 +1,14 @@
+#cloud-config
+hostname: gpu-node
+manage_etc_hosts: true
+ssh_pwauth: false
+disable_root: true
+write_files:
+  - path: /var/lib/ai-build-tools/bootstrap.json
+    permissions: '0644'
+    content: |
+      {"phase":"configdrive-network","software_install":"post-ssh"}
+runcmd:
+  - [systemd-machine-id-setup]
+  - [netplan, generate]
+  - [netplan, apply]

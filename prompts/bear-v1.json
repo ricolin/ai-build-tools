@@ -1,0 +1,20 @@
+[
+  {
+    "id": "cute-bear-portrait",
+    "prompt": "a cute little brown bear, friendly expression, soft natural light, detailed photograph",
+    "negative_prompt": "text, watermark, logo, duplicate animal, malformed paws, extra limbs, blurry",
+    "seed": 26081011
+  },
+  {
+    "id": "cute-bear-forest",
+    "prompt": "a cute little brown bear sitting in a green forest clearing, soft morning light, detailed wildlife photograph",
+    "negative_prompt": "text, watermark, logo, duplicate animal, malformed paws, extra limbs, blurry",
+    "seed": 26081012
+  },
+  {
+    "id": "cute-bear-reading",
+    "prompt": "a cute little brown bear reading a book beside a warm window, cozy whimsical photograph",
+    "negative_prompt": "text, watermark, logo, duplicate animal, malformed paws, extra limbs, blurry",
+    "seed": 26081013
+  }
+]

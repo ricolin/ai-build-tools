@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+ENV/
+
+# Workflow runtime
+runs/
+*.tar
+*.env
+!config.env.example
+*.log
+*.sha256
+*.SHA256SUMS
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/

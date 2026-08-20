@@ -1,0 +1,47 @@
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============gpu-firstboot=="
+
+--===============gpu-firstboot==
+Content-Type: text/cloud-boothook; charset="us-ascii"
+
+#!/bin/sh
+set -eu
+exec >>/var/log/gpu-firstboot.log 2>&1
+date -u +%FT%TZ
+
+# If the base image lacks /etc/machine-id, systemd-networkd cannot derive
+# its DHCPv6 DUID and marks even a static IPv4 link failed. Create the
+# per-instance ID; never ship a populated ID in the image.
+if [ ! -s /etc/machine-id ]; then
+  systemd-machine-id-setup
+fi
+test -s /etc/machine-id
+
+# Nova ConfigDrive is authoritative for Ethernet. Do not create another
+# netplan Ethernet definition here: two names/routes for the same physical MAC
+# make netplan reject the whole configuration. Reapply the already-generated
+# ConfigDrive profile now that machine-id exists.
+netplan generate
+if ! netplan apply; then
+  systemctl restart systemd-networkd
+fi
+ip -br address
+ip route
+install -d -m 0755 /var/lib/ai-build-tools
+date -u +%FT%TZ >/var/lib/ai-build-tools/firstboot-complete
+
+--===============gpu-firstboot==
+Content-Type: text/cloud-config; charset="us-ascii"
+
+#cloud-config
+hostname: gpu-node
+manage_etc_hosts: true
+ssh_pwauth: false
+disable_root: true
+write_files:
+  - path: /var/lib/ai-build-tools/bootstrap.json
+    permissions: '0644'
+    content: |
+      {"phase":"machine-id-and-configdrive-network","software_install":"post-ssh"}
+
+--===============gpu-firstboot==--
